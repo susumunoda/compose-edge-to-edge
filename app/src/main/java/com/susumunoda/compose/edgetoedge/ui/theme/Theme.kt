@@ -57,8 +57,11 @@ fun EdgeToEdgeTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            // This is the opposite of what the documentation for WindowInsetsControllerCompat#setAppearanceLightStatusBars
+            // states, but it has the desired outcome — dark foreground color in light mode, light
+            // foreground color in dark mode. The discrepancy may be due to the special handling of
+            // the status bar colors for implementing edge-to-edge UI.
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
